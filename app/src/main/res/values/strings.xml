@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RecipeAssignment</string>
+    <string name="SUPABASE_KEY">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZzZ3JsdWxsdmdidHp2YXRjdWpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTI5NTc2NjMsImV4cCI6MjAwODUzMzY2M30.YvOGTmJIN8vItqyrzMZgkHhg54-jDwLupb9GMRyitIg</string>
+</resources>
