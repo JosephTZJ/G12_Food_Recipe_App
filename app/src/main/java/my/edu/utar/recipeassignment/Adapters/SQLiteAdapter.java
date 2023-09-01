@@ -47,6 +47,9 @@ public class SQLiteAdapter {
         context = c;
     }
 
+    public SQLiteAdapter(FavouritesAdapter favouritesAdapter) {
+    }
+
     //open database to insert data/to write data
     public SQLiteAdapter openToWrite() throws android.database.SQLException{
 
@@ -103,8 +106,6 @@ public class SQLiteAdapter {
 
         //update the table with these values
         return sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
-
-
 
     }
 
@@ -453,6 +454,27 @@ public class SQLiteAdapter {
         }
     }
 
+    public List<String> getAllFavouriteRecipesId() {
+        List<String> ids = new ArrayList<>(); // Create a list to store IDs
+
+        String[] columns = new String[]{KEY_ID};
+        Cursor cursor = sqLiteDatabase.query(TABLE_FAV_ID_NAME, columns, null, null, null, null, null);
+
+        int index_CONTENT = cursor.getColumnIndex(KEY_ID);
+        String result = "";
+
+        for (cursor.moveToFirst(); !(cursor.isAfterLast()); cursor.moveToNext())
+        {
+            String id = cursor.getString(index_CONTENT);
+            ids.add(id);
+//            result = result + cursor.getString(index_CONTENT) + " ";
+        }
+
+        cursor.close(); // Close the cursor when you're done with it
+
+        return ids; // Return the list of IDs
+
+    }
 
 
 

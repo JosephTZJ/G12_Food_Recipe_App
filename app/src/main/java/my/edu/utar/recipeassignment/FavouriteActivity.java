@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,9 +106,10 @@ public class FavouriteActivity extends AppCompatActivity {
 //        List<String> recipeImageURLs = mySQLiteAdapter.findRecipeImage();
 //        List<String> recipeIds = mySQLiteAdapter.findRecipeId();
 
-        List<Recipe> favoriteRecipes = mySQLiteAdapter.getAllFavouriteRecipes();
+        List<String> favoriteRecipes = mySQLiteAdapter.getAllFavouriteRecipesId();
 
 
+        System.out.println("the getallfavid returns:" + favoriteRecipes);
         adapter = new FavouritesAdapter(favoriteRecipes, FavouriteActivity.this);
 
 
@@ -123,9 +122,6 @@ public class FavouriteActivity extends AppCompatActivity {
         recycler_recipes.setHasFixedSize(true);
         recycler_recipes.setLayoutManager(new LinearLayoutManager(FavouriteActivity.this, LinearLayoutManager.VERTICAL, false));
         recycler_recipes.setAdapter(adapter);
-
-
-
 
 
 
@@ -162,6 +158,61 @@ public class FavouriteActivity extends AppCompatActivity {
                 return result;
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getRecipeFromDatabase(String id)  {
+
+        System.out.println("key: " + getString(R.string.SUPABASE_KEY));
+
+        try {
+            URL url = new URL("https://fsgrlullvgbtzvatcujr.supabase.co/rest/v1/Recipe?"
+            );
+            HttpURLConnection hc = (HttpURLConnection) url.openConnection();
+            hc.setRequestProperty("apikey", getString(R.string.SUPABASE_KEY));
+            hc.setRequestProperty("Authorization", "Bearer " + getString(R.string.SUPABASE_KEY));
+
+            int responseCode = hc.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(hc.getInputStream()));
+                String line;
+                StringBuilder response = new StringBuilder();
+
+                while ((line = reader.readLine()) != null) {
+                    response.append(line); // Append the entire line, including newline character
+                }
+                reader.close();
+
+//                System.out.println("key: " + getString(R.string.SUPABASE_KEY));
+
+
+                // Now parse the entire response as a JSON array or object
+                JSONArray jsonArray = new JSONArray(response.toString());
+
+                // Process the JSON array or object as needed
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    String recipeId = jsonObject.optString("id");
+
+
+                    System.out.println("recipeId in favactivity: " + recipeId);
+                    System.out.println("id in favactivity: " + id);
+
+
+                    // Check if the 'id' matches the provided 'id' and append to response if needed
+                    if (recipeId.trim().equals(id.trim())) {
+                        System.out.println("id in equal: " + recipeId);
+
+                        return jsonObject.toString();
+                    }
+                }
+
+            }
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         return null;

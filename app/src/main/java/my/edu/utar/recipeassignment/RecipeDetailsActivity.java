@@ -105,6 +105,8 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
                 JSONObject targetRecipe = findRecipe(response, recipeId);
 
+                System.out.println("\n"+targetRecipe+"\n");
+
                 Id = recipeId;
 
 
@@ -190,7 +192,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
 
                 } else {
-                    dialog.dismiss();
 
                     tv_recipename.setText("Recipe not found.");
                     tv_recipename.setTextSize(18);
@@ -326,19 +327,16 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         for (int i = 0; i < jsonArray.length(); i++) {
 
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-            String id = jsonObject.getString("id");
-            System.out.println("id: "+ id);
 
-            if (id.equals(recipeId)) {
+            String id = jsonObject.getString("id");
+
+            if (recipeId.trim().equals(id.trim())) {
                 targetRecipe = jsonObject;
-                System.out.println("targetRecipe: " + targetRecipe.getString("recipe_name"));
                 break; // Stop searching once the target recipe is found
             }
         }
 
         return targetRecipe;
     }
-
-
 
 }
