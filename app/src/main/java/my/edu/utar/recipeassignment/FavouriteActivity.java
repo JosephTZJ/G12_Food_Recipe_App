@@ -1,6 +1,7 @@
 package my.edu.utar.recipeassignment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -41,6 +42,13 @@ public class FavouriteActivity extends AppCompatActivity {
 
     Intent intent;
 
+    // Declare SharedPreferences variable
+    private SharedPreferences sharedPreferences;
+
+    // SharedPreferences key for storing selected item index
+    private static final String PREF_SELECTED_NAV_ITEM_INDEX = "selected_nav_item_index";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +57,17 @@ public class FavouriteActivity extends AppCompatActivity {
 
         CardView cardView_fav = findViewById(R.id.fav_list_container);
 
+        sharedPreferences = getSharedPreferences("my_prefs", MODE_PRIVATE);
+
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         recycler_recipes = findViewById(R.id.recycler_favourites);
 
         intent = new Intent(FavouriteActivity.this, RecipeDetailsActivity.class); // Initialize the Intent
+
+        int selectedIndex = getSelectedNavItemIndex(0);
+
+        bottomNavigationView.getMenu().getItem(selectedIndex).setChecked(true);
 
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
@@ -60,11 +75,14 @@ public class FavouriteActivity extends AppCompatActivity {
 
 
                 case R.id.home:
+                    saveSelectedNavItemIndex(0);
                     Intent intent = new Intent(FavouriteActivity.this, MainActivity.class);
                     startActivity(intent);
                     return true;
 
                 case R.id.favourite:
+                    saveSelectedNavItemIndex(1);
+
                     return true;
 
                 case R.id.cart:
@@ -91,6 +109,7 @@ public class FavouriteActivity extends AppCompatActivity {
 //        List<String> recipeIds = mySQLiteAdapter.findRecipeId();
 
         List<Recipe> favoriteRecipes = mySQLiteAdapter.getAllFavouriteRecipes();
+
 
         adapter = new FavouritesAdapter(favoriteRecipes, FavouriteActivity.this);
 
@@ -146,6 +165,17 @@ public class FavouriteActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void saveSelectedNavItemIndex(int selectedIndex) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PREF_SELECTED_NAV_ITEM_INDEX, selectedIndex);
+        editor.apply();
+    }
+
+    // Function to retrieve the selected item index from SharedPreferences
+    private int getSelectedNavItemIndex(int defaultValue) {
+        return sharedPreferences.getInt(PREF_SELECTED_NAV_ITEM_INDEX, defaultValue);
     }
 
 

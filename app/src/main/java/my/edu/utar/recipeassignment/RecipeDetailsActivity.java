@@ -2,6 +2,7 @@ package my.edu.utar.recipeassignment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,7 +53,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     String recipeImageURL;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +60,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         //to find all the views
         findViews();
+
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()){
@@ -187,6 +188,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                             .load(imageURL)
                             .into(recipe_image);
 
+
                 } else {
                     dialog.dismiss();
 
@@ -217,6 +219,23 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.details_top_menu, menu);
+
+        MenuItem favoriteMenuItem = menu.findItem(R.id.action_favourite);
+
+        mySQLiteAdapter = new SQLiteAdapter(this);
+        mySQLiteAdapter.openToRead();
+
+        // Check if the recipe is a favorite and set the icon accordingly
+        if (mySQLiteAdapter.checkIsFavourite(Id)) {
+            favoriteMenuItem.setIcon(R.drawable.ic_baseline_favorite_24); // Set the filled favorite icon
+            isFavorite = true;
+        } else {
+            favoriteMenuItem.setIcon(R.drawable.ic_baseline_favorite_border_24); // Set the unfilled favorite icon
+            isFavorite = false;
+        }
+        mySQLiteAdapter.close();
+
+
         return true;
     }
 
@@ -245,8 +264,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 Intent intent = getIntent();
                 String recipeId = intent.getStringExtra("recipeId");
 
-                addToFavourites(isFavorite, title, imageURL, ingredients, steps, recipeId);
-
+                addToFavourites(isFavorite, title, imageURL, ingredients, steps, recipeId); //add to sql fav database
 
                 return true;
 
@@ -274,18 +292,24 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
 //        mySQLiteAdapter.deleteAll();
 
+        System.out.println("Entering add to fav function");
+
+        System.out.println("the isfav is " + isFavorite);
+
 
         if(isFavorite){     // add recipe to db
 
             System.out.println("Adding to favorites and writing to DB");
             mySQLiteAdapter.insert_recipe( title, imageURL, recipeId, ingredients, steps);
+            mySQLiteAdapter.insert_fav_recipe_id(recipeId);
             mySQLiteAdapter.close();
 
         }
         else{
             System.out.println("Removing from favorites and deleting from DB");
 
-//            mySQLiteAdapter.remove_fav(recipeId);
+            mySQLiteAdapter.remove_fav_recipe_id(recipeId);
+            mySQLiteAdapter.remove_fav_recipe_from_id(recipeId);
 
 
         }
@@ -314,4 +338,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         return targetRecipe;
     }
+
+
+
 }

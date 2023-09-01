@@ -2,6 +2,7 @@ package my.edu.utar.recipeassignment;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,14 @@ public class MainActivity extends AppCompatActivity {
 
     Intent intent;
 
+    // Declare SharedPreferences variable
+    private SharedPreferences sharedPreferences;
+
+    // SharedPreferences key for storing selected item index
+    private static final String PREF_SELECTED_NAV_ITEM_INDEX = "selected_nav_item_index";
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         CardView cardView = findViewById(R.id.random_list_container);
         intent = new Intent(MainActivity.this, RecipeDetailsActivity.class); // Initialize the Intent
 
+        sharedPreferences = getSharedPreferences("my_prefs", MODE_PRIVATE);
 
         //start connection to db
         Handler mHandler = new Handler();
@@ -58,9 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
 
                 case R.id.home:
+                    saveSelectedNavItemIndex(0);
                     return true;
 
                 case R.id.favourite:
+                    saveSelectedNavItemIndex(1);
                     Intent intent = new Intent(MainActivity.this, FavouriteActivity.class);
                     startActivity(intent);
                     return true;
@@ -162,6 +174,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    private void saveSelectedNavItemIndex(int selectedIndex) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(PREF_SELECTED_NAV_ITEM_INDEX, selectedIndex);
+        editor.apply();
+    }
+
+    // Function to retrieve the selected item index from SharedPreferences
+    private int getSelectedNavItemIndex(int defaultValue) {
+        return sharedPreferences.getInt(PREF_SELECTED_NAV_ITEM_INDEX, defaultValue);
     }
 
 

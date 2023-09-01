@@ -28,10 +28,14 @@ public class SQLiteAdapter {
     private static String INGREDIENTS = "ingredients";
     private static String STEPS = "steps";
 
+    private static String TABLE_FAV_ID_NAME = "favoriteRecipeIdTable";
+
     private static String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + KEY_ID + " TEXT,"
             + RECIPE_TITLE + " TEXT,"
             + RECIPE_IMAGE + " TEXT," + FAVOURTIE_STATUS + " TEXT,"
             + INGREDIENTS + " TEXT," + STEPS + " TEXT)";
+
+    private static String CREATE_TABLE_2 =  "CREATE TABLE " + TABLE_FAV_ID_NAME + "(" + KEY_ID + " TEXT)";
 
 
     private Context context;
@@ -102,6 +106,49 @@ public class SQLiteAdapter {
 
 
 
+    }
+
+    // insert favourited id into db
+    public long insert_fav_recipe_id(String id){
+        System.out.println("Inserting recipe fav id");
+
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(KEY_ID, id);
+        System.out.println("id inserted is:" + id);
+
+        System.out.println("Inserting finished");
+
+        return sqLiteDatabase.insert(TABLE_FAV_ID_NAME, null, contentValues);
+
+    }
+
+    public void remove_fav_recipe_id(String id)
+    {
+        System.out.println("Removing recipe fav id");
+
+        // Define the WHERE clause to specify which row to delete
+        String whereClause = KEY_ID + " = ?";
+        String[] whereArgs = {id};
+
+        // Delete the row from the database
+        sqLiteDatabase.delete(TABLE_FAV_ID_NAME, whereClause, whereArgs);
+
+        System.out.println("Removal finished");
+    }
+
+    public void remove_fav_recipe_from_id(String id){
+        System.out.println("Removing recipe fav ");
+
+        // Define the WHERE clause to specify which row to delete
+        String whereClause = KEY_ID + " = ?";
+        String[] whereArgs = {id};
+
+        // Delete the row from the database
+        sqLiteDatabase.delete(TABLE_NAME, whereClause, whereArgs);
+
+        System.out.println("Removal finished");
     }
 
 
@@ -382,6 +429,32 @@ public class SQLiteAdapter {
         return favouriteRecipes;
     }
 
+    public boolean checkIsFavourite(String id){
+
+        if (sqLiteDatabase == null) {
+            // Handle the case where sqLiteDatabase is null, e.g., by returning false or handling the error
+            return false;
+        }else {
+
+            System.out.println("\nChecking if recipe is a favorite");
+
+            String[] columns = new String[]{KEY_ID};
+            String selection = KEY_ID + " = ?";
+            String[] selectionArgs = {id};
+
+            Cursor cursor = sqLiteDatabase.query(TABLE_FAV_ID_NAME, columns, selection, selectionArgs,
+                    null, null, null);
+
+            boolean isFavourite = cursor.getCount() > 0; // Check if cursor has rows
+
+            System.out.println("\nIs the recipe with ID " + id + " a favorite? " + isFavourite);
+
+            return isFavourite;
+        }
+    }
+
+
+
 
 
     //close db
@@ -411,6 +484,8 @@ public class SQLiteAdapter {
         @Override
         public void onCreate(SQLiteDatabase sqLiteDatabase) {
             sqLiteDatabase.execSQL(CREATE_TABLE);
+            sqLiteDatabase.execSQL(CREATE_TABLE_2);
+
         }
 
         //version control
@@ -420,6 +495,8 @@ public class SQLiteAdapter {
             //Q2
             //to upgrade the database version, to inform that I have a new version
             sqLiteDatabase.execSQL(CREATE_TABLE);
+            sqLiteDatabase.execSQL(CREATE_TABLE_2);
+
 
         }
     }
