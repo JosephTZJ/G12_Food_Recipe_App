@@ -5,11 +5,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.SearchView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,12 +24,18 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    RecipeAdapter recipeAdapter;
-
     private static final int homePage = R.id.home_page;
     private static final int favouritesPage = R.id.favourites_page;
     private static final int profilePage = R.id.profile_page;
+
+    RecyclerView recyclerView;
+    RecipeAdapter recipeAdapter;
+
+    private List<Recipe> allRecipes = new ArrayList<>();
+    private List<Recipe> filteredRecipes = new ArrayList<>();
+
+    private static final long SEARCH_DELAY_MS = 300;
+    private Handler searchHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +75,20 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     return false;
                 });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchHandler.removeCallbacksAndMessages(null);
+                searchHandler.postDelayed(() -> filterRecipes(newText), SEARCH_DELAY_MS);
+                return true;
+            }
+        });
     }
 
     private void showToast(String message) {
@@ -79,10 +99,11 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public boolean handleMessage(Message msg) {
             if (msg.what == 1) {
-                List<Recipe> recipes = (List<Recipe>) msg.obj;
+                allRecipes = (List<Recipe>) msg.obj;
+                filteredRecipes.addAll(allRecipes);
 
-                if (recipes != null) {
-                    recipeAdapter = new RecipeAdapter(recipes);
+                if (allRecipes != null) {
+                    recipeAdapter = new RecipeAdapter(filteredRecipes);
                     recyclerView.setAdapter(recipeAdapter);
                 } else {
                     showToast("Failed to fetch recipes.");
@@ -93,7 +114,6 @@ public class HomeActivity extends AppCompatActivity {
     });
 
     private class MyThread extends Thread {
-
         @Override
         public void run() {
             try {
@@ -115,7 +135,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     reader.close();
 
-                    List<Recipe> recipes = parseRecipes(response.toString());
+                    List<Recipe> recipes = inputRecipes(response.toString());
 
                     Message message = new Message();
                     message.what = 1;
@@ -132,7 +152,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private List<Recipe> parseRecipes(String json) throws JSONException {
+    private List<Recipe> inputRecipes(String json) throws JSONException {
         List<Recipe> recipes = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(json);
 
@@ -146,5 +166,17 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         return recipes;
+    }
+
+    private void filterRecipes(String query) {
+        filteredRecipes.clear();
+
+        for (Recipe recipe : allRecipes) {
+            if (recipe.getRecipeName().toLowerCase().contains(query.toLowerCase())) {
+                filteredRecipes.add(recipe);
+            }
+        }
+
+        recipeAdapter.notifyDataSetChanged();
     }
 }
