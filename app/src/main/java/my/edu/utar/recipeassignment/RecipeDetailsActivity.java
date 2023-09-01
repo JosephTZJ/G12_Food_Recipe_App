@@ -7,8 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.WindowManager;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import my.edu.utar.recipeassignment.Adapters.IngredientsAdapter;
+import my.edu.utar.recipeassignment.Adapters.SQLiteAdapter;
 
 public class RecipeDetailsActivity extends AppCompatActivity {
 
@@ -36,6 +38,19 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     LinearLayout stepslayout;
 
     IngredientsAdapter adapter;
+
+    private SQLiteAdapter mySQLiteAdapter;
+
+    private Toolbar toolbar;
+
+    private boolean isFavorite = false; // Keep track of favorite status
+
+    String Id;
+    String recipe_title;
+    List<String> recipe_ingredients;
+    List<String> recipe_steps;
+    String recipeImageURL;
+
 
 
     @Override
@@ -73,50 +88,39 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             return false;
         });
 
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
         Intent intent = getIntent();
         String response = intent.getStringExtra("response");
         String recipeId = intent.getStringExtra("recipeId");
-        System.out.println("Response3: " + response);
-        System.out.println("recipeId: " + recipeId);
+//        System.out.println("Response3: " + response);
+//        System.out.println("recipeId: " + recipeId);
 
 
-        if (response != null && recipeId != null) {
+        if (response != null || recipeId != null) {
             try {
-                JSONArray jsonArray = new JSONArray(response);
-                JSONObject targetRecipe = null;
 
-                // Find the recipe with the specified recipeId
-                for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject targetRecipe = findRecipe(response, recipeId);
 
-                    dialog = new ProgressDialog(this);
-                    dialog.setTitle("Loading Details....");
-                    dialog.show();
+                Id = recipeId;
 
-
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    String id = jsonObject.getString("id");
-                    System.out.println("id: "+ id);
-
-                    if (id.equals(recipeId)) {
-                        targetRecipe = jsonObject;
-                        System.out.println("targetRecipe: " + targetRecipe.getString("recipe_name"));
-                        break; // Stop searching once the target recipe is found
-                    }
-                }
 
                 if (targetRecipe != null) {
-
-                    dialog.dismiss();
 
                     String title = targetRecipe.getString("recipe_name");
                     String ingredients = targetRecipe.getString("ingredients");
                     String steps = targetRecipe.getString("steps") ;
                     String imageURL = targetRecipe.getString("imageURL");
 
-                    System.out.println("title: "+ title);
-                    System.out.println("ingredients: "+ ingredients);
-                    System.out.println("steps: "+ steps);
 
+//                    System.out.println("title: "+ title);
+//                    System.out.println("ingredients: "+ ingredients);
+//                    System.out.println("steps: "+ steps);
+
+                    recipe_title = title;
+                    recipeImageURL = imageURL;
 
                     tv_recipename.setText(title);   //recipe title
 
@@ -129,10 +133,13 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                         for (int i = 0; i < ingredientsArray.length(); i++) {
                             String ingredient = ingredientsArray.getString(i);
                             ingredientList.add(ingredient);
-                            System.out.println("\n"+ingredientsArray.length()+"\n");
-                            System.out.println("\n"+ingredient+"\n");
+//                            System.out.println("\n"+ingredientsArray.length()+"\n");
+//                            System.out.println("\n"+ingredient+"\n");
+//                            System.out.println("\ningredientsList"+ingredientList+"\n");
 
                         }
+
+                        recipe_ingredients = ingredientList;
 
                         recycler_ingredients.setHasFixedSize(true);
                         recycler_ingredients.setLayoutManager(new LinearLayoutManager(RecipeDetailsActivity.this,LinearLayoutManager.VERTICAL, false));
@@ -157,10 +164,12 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
                         formattedSteps.append(i + 1).append(". ").append(instruction).append("\n\n");
 
-
-                        System.out.println("\n"+stepsArray.length()+"\n");
-                        System.out.println("\n"+instruction+"\n");
+//                        System.out.println("\nstepsList"+stepsList+"\n");
+//                        System.out.println("\n"+stepsArray.length()+"\n");
+//                        System.out.println("\n"+instruction+"\n");
                     }
+
+                    recipe_steps = stepsList;
 
                     TextView stepTextView = new TextView(this);
 
@@ -174,7 +183,6 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                     stepslayout.addView(stepTextView);
 
                     //get image from supabase
-                    //load image using Glide
                     Picasso.get()
                             .load(imageURL)
                             .into(recipe_image);
@@ -203,5 +211,107 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         stepslayout = findViewById(R.id.layout_steps);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.details_top_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_back:
+                // Handle the back action here
+                onBackPressed(); // This will go back to the previous activity
+                return true;
+            case R.id.action_favourite:
+
+                isFavorite = !isFavorite;  // toggle fav status on click
+                updateFavoriteMenuItemIcon(item); // Update the menu item icon
+
+                String title = recipe_title; // Get recipe title
+                String imageURL = recipeImageURL; // Get image URL, you need to implement this part
+                List<String> ingredients = recipe_ingredients; // Get ingredients, you need to implement this part
+                List<String> steps = recipe_steps; // Get steps, you need to implement this part
+
+                Intent intent = getIntent();
+                String recipeId = intent.getStringExtra("recipeId");
+
+                addToFavourites(isFavorite, title, imageURL, ingredients, steps, recipeId);
+
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    //update the fav icon
+    private void updateFavoriteMenuItemIcon(MenuItem favoriteMenuItem) {
+
+        if (isFavorite) {
+            favoriteMenuItem.setIcon(R.drawable.ic_baseline_favorite_24); // Set the favorite icon
+        } else {
+            favoriteMenuItem.setIcon(R.drawable.ic_baseline_favorite_border_24); // Set the not-favorite icon
+        }
+    }
+
+
+    private void addToFavourites(boolean isFavorite, String title, String imageURL, List<String> ingredients, List<String> steps, String recipeId) {
+
+        // write the favourited recipe into db
+        mySQLiteAdapter = new SQLiteAdapter(this);
+        mySQLiteAdapter.openToWrite();
+
+//        mySQLiteAdapter.deleteAll();
+
+
+        if(isFavorite){     // add recipe to db
+
+            System.out.println("Adding to favorites and writing to DB");
+            mySQLiteAdapter.insert_recipe( title, imageURL, recipeId, ingredients, steps);
+            mySQLiteAdapter.close();
+
+        }
+        else{
+            System.out.println("Removing from favorites and deleting from DB");
+
+//            mySQLiteAdapter.remove_fav(recipeId);
+
+
+        }
+        mySQLiteAdapter.close();
+
+    }
+
+    private JSONObject findRecipe(String response, String recipeId) throws JSONException {
+
+        JSONArray jsonArray = new JSONArray(response);
+        JSONObject targetRecipe = null;
+
+        // Find the recipe with the specified recipeId
+        for (int i = 0; i < jsonArray.length(); i++) {
+
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            String id = jsonObject.getString("id");
+            System.out.println("id: "+ id);
+
+            if (id.equals(recipeId)) {
+                targetRecipe = jsonObject;
+                System.out.println("targetRecipe: " + targetRecipe.getString("recipe_name"));
+                break; // Stop searching once the target recipe is found
+            }
+        }
+
+        return targetRecipe;
     }
 }
