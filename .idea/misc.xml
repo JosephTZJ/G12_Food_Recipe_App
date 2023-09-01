@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/drawable/bottom_navigation_item_color.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/activity_splash_screen.xml" value="0.2359375" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.1" />
       </map>
     </option>
   </component>

@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#B1FFFC"
+    android:background="#FFFFFF"
     tools:context=".MainActivity">
 
-    <TextView
+    <SearchView
+        android:id="@+id/search_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello, MainActivity!"
-        android:textSize="24sp"
-        android:layout_gravity="center"/>
+        android:queryHint="Search Food Recipes"
+        android:iconifiedByDefault="false"
+        android:layout_alignParentTop="true"
+        />
 
-</LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/food_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search_view"
+        android:layout_above="@id/bottom_navigation_view"
+        android:padding="16dp" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#A4E8E0"
+        app:itemTextColor="@drawable/bottom_navigation_item_color"
+        app:itemIconTint="@drawable/bottom_navigation_item_color"
+        app:menu="@menu/bottom_navigation_menu" />
+
+
+</RelativeLayout>
