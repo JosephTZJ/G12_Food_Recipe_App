@@ -346,34 +346,53 @@ public class SQLiteAdapter {
     }
 
     // Add a new method to find the title using recipeId
-    public String findRecipeTitleByRecipeId(String recipeId) {
-        String[] columns = new String[]{KEY_ID, RECIPE_TITLE};
+    public Recipe findRecipeByRecipeId(String recipeId) {
+        String[] columns = new String[]{KEY_ID, RECIPE_TITLE, RECIPE_IMAGE, INGREDIENTS, STEPS};
         String selection = KEY_ID + " = ?";
         String[] selectionArgs = {recipeId};
 
         System.out.println("\nrecipe_id is 2 " + recipeId);
 
 
-        Cursor cursor = sqLiteDatabase.query(TABLE_NAME, columns, KEY_ID +"=?", new String[] {recipeId}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(TABLE_NAME, columns, selection, selectionArgs, null, null, null);
 
-        String title = "";
-
-        int index_CONTENT = cursor.getColumnIndex(KEY_ID);
-        int index_CONTENT_2 = cursor.getColumnIndex(RECIPE_TITLE);
-
-
+        Recipe recipe = null;
 
         if (cursor.moveToFirst()) {
-            title = cursor.getString(index_CONTENT_2);
+            int indexId = cursor.getColumnIndex(KEY_ID);
+            int indexTitle = cursor.getColumnIndex(RECIPE_TITLE);
+            int indexIngredients = cursor.getColumnIndex(INGREDIENTS);
+            int indexSteps = cursor.getColumnIndex(STEPS);
+            int imageURL = cursor.getColumnIndex(RECIPE_IMAGE);
+
+
+            String id = cursor.getString(indexId);
+            String title = cursor.getString(indexTitle);
+            String ingredientsJson = cursor.getString(indexIngredients); // Retrieve as JSON
+            String stepsJson = cursor.getString(indexSteps);
+            String image = cursor.getString(imageURL);
+
+            System.out.println("sql adapter stepsjson:" + stepsJson);
+            System.out.println("sql adapter ingredientsJson:" + ingredientsJson);
+
+
+            List<String> ingredients = parseJsonArray(ingredientsJson);
+            List<String> steps = parseJsonArray(stepsJson);
+
+            // Now, create a Recipe object with the retrieved data
+            recipe = new Recipe(id, title, image, ingredients, steps);
         }
 
         cursor.close(); // Close the cursor when done
 
-        System.out.println("\nrecipe_title is 2 " + title);
+
+        System.out.println("sql adapter recipe:" + recipe);
 
 
-        return title;
+        return recipe;
     }
+
+
 
     public List<Recipe> getAllFavouriteRecipes() {
 
@@ -490,6 +509,19 @@ public class SQLiteAdapter {
         return sqLiteDatabase.delete(TABLE_NAME, null, null);
     }
 
+
+    private List<String> parseJsonArray(String jsonArrayString) {
+        List<String> list = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(jsonArrayString);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                list.add(jsonArray.getString(i));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
 
 

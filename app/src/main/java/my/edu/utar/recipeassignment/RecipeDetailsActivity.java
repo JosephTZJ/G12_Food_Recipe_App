@@ -62,32 +62,32 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         findViews();
 
 
-        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()){
-
-
-                case R.id.home:
-                    Intent intent_home = new Intent(RecipeDetailsActivity.this, MainActivity.class);
-                    startActivity(intent_home);
-                    return true;
-
-                case R.id.favourite:
-                    Intent intent_fav = new Intent(RecipeDetailsActivity.this, FavouriteActivity.class);
-                    startActivity(intent_fav);
-                    return true;
-
-                case R.id.cart:
-                    return true;
-
-                case R.id.calendar:
-                    return true;
-
-                case R.id.settings:
-                    return true;
-
-            }
-            return false;
-        });
+//        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+//            switch (item.getItemId()){
+//
+//
+//                case R.id.home:
+//                    Intent intent_home = new Intent(RecipeDetailsActivity.this, MainActivity.class);
+//                    startActivity(intent_home);
+//                    return true;
+//
+//                case R.id.favourite:
+//                    Intent intent_fav = new Intent(RecipeDetailsActivity.this, FavouriteActivity.class);
+//                    startActivity(intent_fav);
+//                    return true;
+//
+//                case R.id.cart:
+//                    return true;
+//
+//                case R.id.calendar:
+//                    return true;
+//
+//                case R.id.settings:
+//                    return true;
+//
+//            }
+//            return false;
+//        });
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

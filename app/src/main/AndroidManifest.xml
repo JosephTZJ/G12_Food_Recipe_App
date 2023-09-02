@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RecipeAssignment">
         <activity
+            android:name=".DownloadedRecipeDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".DownloadActivity"
             android:exported="false" />
         <activity

@@ -30,7 +30,7 @@ import my.edu.utar.recipeassignment.Helpers.Recipe;
 
 public class FavouriteActivity extends AppCompatActivity {
 
-    BottomNavigationView bottomNavigationView;
+    BottomNavigationView bottomNavigationView,topNavigationMenu;
 
     private SQLiteAdapter mySQLiteAdapter;
 
@@ -41,11 +41,12 @@ public class FavouriteActivity extends AppCompatActivity {
     Intent intent;
 
     // Declare SharedPreferences variable
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences, sharedPreferences2;
 
     // SharedPreferences key for storing selected item index
     private static final String PREF_SELECTED_NAV_ITEM_INDEX = "selected_nav_item_index";
 
+    private static final String PREF_SELECTED_TOP_NAV_ITEM_INDEX = "selected_top_nav_item_index";
 
 
     @Override
@@ -57,9 +58,12 @@ public class FavouriteActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("my_prefs", MODE_PRIVATE);
 
+        sharedPreferences2 = getSharedPreferences("my_prefs2", MODE_PRIVATE);
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         recycler_recipes = findViewById(R.id.recycler_favourites);
+        topNavigationMenu = findViewById(R.id.topNavigationView);
+
 
         intent = new Intent(FavouriteActivity.this, RecipeDetailsActivity.class); // Initialize the Intent
 
@@ -67,6 +71,9 @@ public class FavouriteActivity extends AppCompatActivity {
 
         bottomNavigationView.getMenu().getItem(selectedIndex).setChecked(true);
 
+        int selectedIndex2 = getSelectedTopNavItemIndex(0);
+
+        topNavigationMenu.getMenu().getItem(selectedIndex2).setChecked(true);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()){
@@ -74,12 +81,13 @@ public class FavouriteActivity extends AppCompatActivity {
 
                 case R.id.home:
                     saveSelectedNavItemIndex(0);
-                    Intent intent = new Intent(FavouriteActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    Intent intentMain = new Intent(FavouriteActivity.this, MainActivity.class);
+                    startActivity(intentMain);
                     return true;
 
                 case R.id.favourite:
                     saveSelectedNavItemIndex(1);
+                    saveSelectedTopNavItemIndex(0); // Set the top navigation menu selection to 0
 
                     return true;
 
@@ -92,6 +100,22 @@ public class FavouriteActivity extends AppCompatActivity {
                 case R.id.settings:
                     return true;
 
+            }
+            return false;
+        });
+
+        topNavigationMenu.setOnNavigationItemSelectedListener(item->
+        {
+            switch(item.getItemId()){
+                case R.id.fav_mn:
+                    saveSelectedTopNavItemIndex(0);
+
+                    return true;
+                case R.id.download_mn:
+                    saveSelectedTopNavItemIndex(1);
+                    Intent intent = new Intent(FavouriteActivity.this, DownloadActivity.class);
+                    startActivity(intent);
+                    return true;
             }
             return false;
         });
@@ -224,10 +248,17 @@ public class FavouriteActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    private void saveSelectedTopNavItemIndex(int selectedIndex) {
+        SharedPreferences.Editor editor = sharedPreferences2.edit();
+        editor.putInt(PREF_SELECTED_TOP_NAV_ITEM_INDEX, selectedIndex);
+        editor.apply();
+    }
     // Function to retrieve the selected item index from SharedPreferences
     private int getSelectedNavItemIndex(int defaultValue) {
         return sharedPreferences.getInt(PREF_SELECTED_NAV_ITEM_INDEX, defaultValue);
     }
-
+    private int getSelectedTopNavItemIndex(int defaultValue) {
+        return sharedPreferences2.getInt(PREF_SELECTED_TOP_NAV_ITEM_INDEX, defaultValue);
+    }
 
 }
