@@ -9,16 +9,18 @@
     android:background="#A4E8E0"
     tools:context=".SplashScreen">
 
-    <ImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/splash_image1"
         android:layout_width="250dp"
         android:layout_height="150dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:src="@drawable/splash_image" />
 
-    <ImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/splash_image2"
         android:layout_width="250dp"
         android:layout_height="150dp"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:src="@drawable/splash_image" />
 
 </LinearLayout>

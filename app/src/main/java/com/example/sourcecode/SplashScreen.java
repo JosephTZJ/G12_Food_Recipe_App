@@ -3,14 +3,11 @@ package com.example.sourcecode;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.bumptech.glide.Glide;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -28,16 +25,6 @@ public class SplashScreen extends AppCompatActivity {
 
         ImageView iv1 = findViewById(R.id.splash_image1);
         ImageView iv2 = findViewById(R.id.splash_image2);
-
-        Glide.with(this)
-                .asGif()
-                .load(R.drawable.splash_image)
-                .into(iv1);
-
-        Glide.with(this)
-                .asGif()
-                .load(R.drawable.splash_image)
-                .into(iv2);
 
         Animation animation1 = AnimationUtils.loadAnimation(this, R.anim.side_slide);
         Animation animation2 = AnimationUtils.loadAnimation(this, R.anim.side_slide);

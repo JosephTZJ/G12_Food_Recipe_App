@@ -3,17 +3,19 @@ package com.example.sourcecode;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
-import androidx.appcompat.widget.SearchView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,17 +26,13 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private static final int homePage = R.id.home_page;
-    private static final int favouritesPage = R.id.favourites_page;
-    private static final int profilePage = R.id.profile_page;
-
     RecyclerView recyclerView;
     RecipeAdapter recipeAdapter;
 
     private List<Recipe> allRecipes = new ArrayList<>();
     private List<Recipe> filteredRecipes = new ArrayList<>();
 
-    private static final long SEARCH_DELAY_MS = 300;
+    private static final long SEARCH_DELAY = 300;
     private Handler searchHandler = new Handler();
 
     @Override
@@ -59,22 +57,31 @@ public class HomeActivity extends AppCompatActivity {
         new MyThread().start();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                item -> {
-                    int itemId = item.getItemId();
-                    switch (itemId) {
-                        case homePage:
-                            showToast("Home Page Selected");
-                            return true;
-                        case favouritesPage:
-                            showToast("Favourites Page Selected");
-                            return true;
-                        case profilePage:
-                            showToast("Profile Page Selected");
-                            return true;
-                    }
-                    return false;
-                });
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.home:
+                    showToast("Home Page Selected");
+                    return true;
+
+                case R.id.favourite:
+                    showToast("Favourite Page Selected");
+                    return true;
+
+                case R.id.cart:
+                    showToast("Shopping Cart Page Selected");
+                    return true;
+
+                case R.id.calendar:
+                    showToast("Planner Page Selected");
+                    return true;
+
+                case R.id.settings:
+                    showToast("Settins Page Selected");
+                    return true;
+
+            }
+            return false;
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -84,8 +91,9 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                // Delay the search to reduce lag
                 searchHandler.removeCallbacksAndMessages(null);
-                searchHandler.postDelayed(() -> filterRecipes(newText), SEARCH_DELAY_MS);
+                searchHandler.postDelayed(() -> filterRecipes(newText), SEARCH_DELAY);
                 return true;
             }
         });
@@ -177,6 +185,8 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-        recipeAdapter.notifyDataSetChanged();
+        if (recipeAdapter != null) {
+            recipeAdapter.notifyDataSetChanged();
+        }
     }
 }
