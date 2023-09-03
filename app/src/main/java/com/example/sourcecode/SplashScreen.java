@@ -16,13 +16,6 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        View decorView = getWindow().getDecorView();
-        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-
-        getSupportActionBar().hide();
-
-        decorView.setSystemUiVisibility(uiOptions);
-
         ImageView iv1 = findViewById(R.id.splash_image1);
         ImageView iv2 = findViewById(R.id.splash_image2);
 

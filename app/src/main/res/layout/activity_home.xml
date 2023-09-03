@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FFFFFF"
-    tools:context=".HomeActivity"
-    android:id="@+id/constraintLayout">
+    tools:context=".HomeActivity">
 
     <android.support.v7.widget.SearchView
         android:id="@+id/search_view"
@@ -21,15 +18,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="16dp" />
+        android:padding="16dp"/>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#A4E8E0"
         app:itemTextColor="@drawable/bottom_navigation_item_color"
         app:itemIconTint="@drawable/bottom_navigation_item_color"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:menu="@menu/nav_bottom_menu" />
 
 </LinearLayout>

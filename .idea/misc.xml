@@ -4,12 +4,23 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/drawable/bottom_navigation_item_color.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.26614583333333336" />
         <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/drawable/ic_baseline_calendar_month_24.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.26614583333333336" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/activity_favourite.xml" value="0.2359375" />
         <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/activity_recipe_details.xml" value="0.25" />
         <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/activity_splash_screen.xml" value="0.2359375" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/details_toolbar.xml" value="0.25" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/list_favourite_recipe.xml" value="0.25" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/list_recipe_ingredients.xml" value="0.25" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/recipe_cardview.xml" value="0.25" />
         <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/layout/recipe_item.xml" value="0.25" />
         <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.1" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/menu/details_top_menu.xml" value="0.25" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/menu/nav_bottom_menu.xml" value="0.25" />
+        <entry key="..\:/Users/Joseph Tee/Desktop/Utar/Year 3 Sem 1/Mobile App Dev/Assignment/Part 2/Source Code/app/src/main/res/menu/top_fav_nav_menu.xml" value="0.25" />
       </map>
     </option>
   </component>
