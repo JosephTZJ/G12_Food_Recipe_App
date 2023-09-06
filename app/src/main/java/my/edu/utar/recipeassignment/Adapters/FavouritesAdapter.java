@@ -27,7 +27,6 @@ public class FavouritesAdapter  extends RecyclerView.Adapter<FavouritesViewHolde
 
     //private List<String> recipes;
     private FavouriteActivity favouriteActivity;
-    private SQLiteAdapter mySQLiteAdapter;
 
     private List<String> favoriteRecipes;
 

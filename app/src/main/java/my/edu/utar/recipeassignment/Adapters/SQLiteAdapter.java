@@ -41,14 +41,18 @@ public class SQLiteAdapter {
     private Context context;
     private SQLiteHelper sqLiteHelper;
     private SQLiteDatabase sqLiteDatabase;
+    private DownloadsAdapter downloadActivity;
 
     //constructor
     public SQLiteAdapter(Context c){
         context = c;
     }
 
-    public SQLiteAdapter(FavouritesAdapter favouritesAdapter) {
+    public SQLiteAdapter(Class<DownloadsAdapter> downloadsAdapterClass) {
+        this.downloadActivity = downloadActivity;
+
     }
+
 
     //open database to insert data/to write data
     public SQLiteAdapter openToWrite() throws android.database.SQLException{

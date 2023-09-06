@@ -10,10 +10,9 @@
     android:id="@+id/download_list_container"
 
     >
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/download_title"
             android:layout_width="wrap_content"
@@ -23,18 +22,31 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:padding="4dp"
+            android:layout_alignParentTop="true"
+            />
+
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:text="Delete"
+            android:icon="@drawable/ic_baseline_delete_24"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:drawableLeft="@drawable/ic_baseline_delete_24"
             />
 
         <TextView
             android:id="@+id/invisible_id_downlaod"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:layout_below="@id/download_title"
             />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </android.support.v7.widget.CardView>

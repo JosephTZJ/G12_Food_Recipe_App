@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 import java.io.BufferedReader;
@@ -23,15 +26,14 @@ import my.edu.utar.recipeassignment.Helpers.Recipe;
 
 public class DownloadActivity extends AppCompatActivity {
 
-    BottomNavigationView bottomNavigationView, topNavigationMenu;
 
     private SQLiteAdapter mySQLiteAdapter;
 
     RecyclerView recycler_recipes;
-
     DownloadsAdapter adapter;
-
     Intent intent;
+    BottomNavigationView bottomNavigationView, topNavigationMenu;
+    Button btn_delete;
 
     // Declare SharedPreferences variable
     private SharedPreferences sharedPreferences, sharedPreferences2;
@@ -56,6 +58,7 @@ public class DownloadActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         recycler_recipes = findViewById(R.id.recycler_downloads);
         topNavigationMenu = findViewById(R.id.topNavigationView);
+        btn_delete = findViewById(R.id.btn_delete);
 
         intent = new Intent(DownloadActivity.this, RecipeDetailsActivity.class); // Initialize the Intent
 
@@ -79,7 +82,6 @@ public class DownloadActivity extends AppCompatActivity {
 
                 case R.id.favourite:
                     saveSelectedNavItemIndex(1);
-                    saveSelectedTopNavItemIndex(0); // Set the top navigation menu selection to 0
 
                     return true;
 
@@ -100,17 +102,32 @@ public class DownloadActivity extends AppCompatActivity {
         {
             switch(item.getItemId()){
                 case R.id.fav_mn:
-                    saveSelectedTopNavItemIndex(0);
+                    //saveSelectedTopNavItemIndex(0);
                     Intent intent = new Intent(DownloadActivity.this, FavouriteActivity.class);
                     startActivity(intent);
                     return true;
                 case R.id.download_mn:
                     saveSelectedTopNavItemIndex(1);
-
                     return true;
             }
             return false;
         });
+
+//        btn_delete.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick(View v) {
+//                TextView invisibleIdTextView = findViewById(R.id.invisible_id_downlaod);
+//                String recipeId = invisibleIdTextView.getText().toString();
+//
+//                // Open the database and remove the favorite recipe by ID
+//                mySQLiteAdapter = new SQLiteAdapter(DownloadActivity.this);
+//                mySQLiteAdapter.openToWrite();
+//                mySQLiteAdapter.remove_fav_recipe_id(recipeId);
+//
+//                // Close the database after performing the operation
+//                mySQLiteAdapter.close();
+//            }
+//        });
 
         // Initialize the SQLiteAdapter
         mySQLiteAdapter = new SQLiteAdapter(this);
@@ -125,7 +142,7 @@ public class DownloadActivity extends AppCompatActivity {
         System.out.println("downloaded recipe:" + downloadRecipes);
 
 
-        adapter = new DownloadsAdapter(downloadRecipes, DownloadActivity.this);
+        adapter = new DownloadsAdapter(downloadRecipes, this);
 
 
         mySQLiteAdapter.close();
@@ -138,6 +155,27 @@ public class DownloadActivity extends AppCompatActivity {
         recycler_recipes.setLayoutManager(new LinearLayoutManager(DownloadActivity.this, LinearLayoutManager.VERTICAL, false));
         recycler_recipes.setAdapter(adapter);
 
+
+//        mySQLiteAdapter = new SQLiteAdapter(this);
+//        mySQLiteAdapter.openToWrite();
+//
+//
+//        btn_delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//                // Open the database and remove the favorite recipe by ID
+//                mySQLiteAdapter = new SQLiteAdapter(DownloadsAdapter.class);
+//                mySQLiteAdapter.openToWrite();
+//                mySQLiteAdapter.remove_fav_recipe_id(download_id.toString());
+//
+//                // Close the database after performing the operation
+//                mySQLiteAdapter.close();
+//            }
+//        });
+//
+//        mySQLiteAdapter.close();
 
 
     }
@@ -198,4 +236,13 @@ public class DownloadActivity extends AppCompatActivity {
         return sharedPreferences2.getInt(PREF_SELECTED_TOP_NAV_ITEM_INDEX, defaultValue);
     }
 
-}
+    public void deleteDownloadedRecipe(String id) {
+
+        System.out.println("the string iss is" + id);
+        mySQLiteAdapter = new SQLiteAdapter(this);
+        mySQLiteAdapter.openToWrite();
+        mySQLiteAdapter.remove_fav_recipe_from_id(id);
+
+        mySQLiteAdapter.close();
+    }
+    }

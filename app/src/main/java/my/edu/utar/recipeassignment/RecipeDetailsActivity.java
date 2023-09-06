@@ -247,6 +247,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        String title = recipe_title; // Get recipe title
+        String imageURL = recipeImageURL; // Get image URL, you need to implement this part
+        List<String> ingredients = recipe_ingredients; // Get ingredients, you need to implement this part
+        List<String> steps = recipe_steps; // Get steps, you need to implement this part
+
+        Intent intent = getIntent();
+        String recipeId = intent.getStringExtra("recipeId");
+
+
         switch (id) {
             case R.id.action_back:
                 // Handle the back action here
@@ -257,17 +266,15 @@ public class RecipeDetailsActivity extends AppCompatActivity {
                 isFavorite = !isFavorite;  // toggle fav status on click
                 updateFavoriteMenuItemIcon(item); // Update the menu item icon
 
-                String title = recipe_title; // Get recipe title
-                String imageURL = recipeImageURL; // Get image URL, you need to implement this part
-                List<String> ingredients = recipe_ingredients; // Get ingredients, you need to implement this part
-                List<String> steps = recipe_steps; // Get steps, you need to implement this part
-
-                Intent intent = getIntent();
-                String recipeId = intent.getStringExtra("recipeId");
 
                 addToFavourites(isFavorite, title, imageURL, ingredients, steps, recipeId); //add to sql fav database
 
                 return true;
+
+            case R.id.action_download:
+
+                addToDownloads(title, imageURL, ingredients, steps, recipeId); //add to sql fav database
+
 
             default:
                 return super.onOptionsItemSelected(item);
@@ -301,7 +308,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         if(isFavorite){     // add recipe to db
 
             System.out.println("Adding to favorites and writing to DB");
-            mySQLiteAdapter.insert_recipe( title, imageURL, recipeId, ingredients, steps);
+            //mySQLiteAdapter.insert_recipe( title, imageURL, recipeId, ingredients, steps);
             mySQLiteAdapter.insert_fav_recipe_id(recipeId);
             mySQLiteAdapter.close();
 
@@ -309,12 +316,35 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         else{
             System.out.println("Removing from favorites and deleting from DB");
 
+            //mySQLiteAdapter.remove_fav_recipe_id(recipeId);
             mySQLiteAdapter.remove_fav_recipe_id(recipeId);
-            mySQLiteAdapter.remove_fav_recipe_from_id(recipeId);
 
 
         }
         mySQLiteAdapter.close();
+
+    }
+
+    private void addToDownloads(String title, String imageURL, List<String> ingredients, List<String> steps, String recipeId) {
+
+        // write the favourited recipe into db
+        mySQLiteAdapter = new SQLiteAdapter(this);
+        mySQLiteAdapter.openToWrite();
+
+        //mySQLiteAdapter.deleteAll();
+
+        System.out.println("Entering add to downloads function");
+
+         // add recipe to db
+            System.out.println("Adding to favorites and writing to DB");
+            mySQLiteAdapter.insert_recipe( title, imageURL, recipeId, ingredients, steps);
+            //mySQLiteAdapter.insert_fav_recipe_id(recipeId);
+            mySQLiteAdapter.close();
+//
+//            System.out.println("Removing from downloads and deleting from DB");
+//
+//            mySQLiteAdapter.remove_fav_recipe_id(recipeId);
+//            //mySQLiteAdapter.remove_fav_recipe_from_id(recipeId);
 
     }
 

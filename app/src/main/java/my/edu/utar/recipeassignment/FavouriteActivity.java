@@ -87,7 +87,6 @@ public class FavouriteActivity extends AppCompatActivity {
 
                 case R.id.favourite:
                     saveSelectedNavItemIndex(1);
-                    saveSelectedTopNavItemIndex(0); // Set the top navigation menu selection to 0
 
                     return true;
 

@@ -2,6 +2,7 @@ package my.edu.utar.recipeassignment.Adapters;
 
 import static android.support.v4.content.res.TypedArrayUtils.getString;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -158,8 +160,21 @@ public class DownloadsAdapter  extends RecyclerView.Adapter<DownloadsViewHolder>
 //                        }
                     }
                 }).start();*/
+
+
             }
         });
+
+        downloadsViewHolder.btn_delete.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                System.out.println("deleting the item");
+                System.out.println("the string id is" + recipe.getId().toString());
+                downloadActivity.deleteDownloadedRecipe(recipe.getId());
+                System.out.println(recipe.getId() + "deleted");
+            }
+        });
+
 
     }
 
@@ -173,12 +188,14 @@ public class DownloadsAdapter  extends RecyclerView.Adapter<DownloadsViewHolder>
     class DownloadsViewHolder extends RecyclerView.ViewHolder {
         TextView download_title;
         TextView download_id;
+        Button btn_delete; // Add a reference to the delete button here
 
         public DownloadsViewHolder(@NonNull View itemView) {
             super(itemView);
 
             download_title = itemView.findViewById(R.id.download_title);
             download_id = itemView.findViewById(R.id.invisible_id_downlaod);
+            btn_delete = itemView.findViewById(R.id.btn_delete); // Initialize the delete button
         }
-
     }
+
