@@ -28,6 +28,7 @@ import java.util.List;
 import my.edu.utar.recipeassignment.DownloadActivity;
 import my.edu.utar.recipeassignment.DownloadedRecipeDetailsActivity;
 import my.edu.utar.recipeassignment.Helpers.Recipe;
+import my.edu.utar.recipeassignment.MainActivity;
 import my.edu.utar.recipeassignment.R;
 import my.edu.utar.recipeassignment.RecipeDetailsActivity;
 
@@ -172,6 +173,11 @@ public class DownloadsAdapter  extends RecyclerView.Adapter<DownloadsViewHolder>
                 System.out.println("the string id is" + recipe.getId().toString());
                 downloadActivity.deleteDownloadedRecipe(recipe.getId());
                 System.out.println(recipe.getId() + "deleted");
+                Toast.makeText(v.getContext(), "Recipe Deleted ", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(v.getContext(), DownloadActivity.class);
+                //intent.putExtra("recipeId", recipe.getId());
+                v.getContext().startActivity(intent);
             }
         });
 
@@ -182,6 +188,7 @@ public class DownloadsAdapter  extends RecyclerView.Adapter<DownloadsViewHolder>
     public int getItemCount() {
         return recipes.size();
     }
+
 }
 
 
@@ -198,4 +205,6 @@ public class DownloadsAdapter  extends RecyclerView.Adapter<DownloadsViewHolder>
             btn_delete = itemView.findViewById(R.id.btn_delete); // Initialize the delete button
         }
     }
+
+
 

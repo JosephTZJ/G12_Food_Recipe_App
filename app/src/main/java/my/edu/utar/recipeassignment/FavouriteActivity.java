@@ -72,8 +72,14 @@ public class FavouriteActivity extends AppCompatActivity {
         bottomNavigationView.getMenu().getItem(selectedIndex).setChecked(true);
 
         int selectedIndex2 = getSelectedTopNavItemIndex(0);
-
+//        saveSelectedTopNavItemIndex(0);
         topNavigationMenu.getMenu().getItem(selectedIndex2).setChecked(true);
+
+//        SharedPreferences.Editor editor = sharedPreferences2.edit();
+//        // Clear all data in SharedPreferences
+//        editor.clear();
+//        // Apply the changes
+//        editor.apply();
 
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()){
@@ -87,7 +93,6 @@ public class FavouriteActivity extends AppCompatActivity {
 
                 case R.id.favourite:
                     saveSelectedNavItemIndex(1);
-
                     return true;
 
                 case R.id.cart:
@@ -103,6 +108,7 @@ public class FavouriteActivity extends AppCompatActivity {
             return false;
         });
 
+        topNavigationMenu.setSelectedItemId(R.id.fav_mn);
         topNavigationMenu.setOnNavigationItemSelectedListener(item->
         {
             switch(item.getItemId()){
@@ -145,8 +151,6 @@ public class FavouriteActivity extends AppCompatActivity {
         recycler_recipes.setHasFixedSize(true);
         recycler_recipes.setLayoutManager(new LinearLayoutManager(FavouriteActivity.this, LinearLayoutManager.VERTICAL, false));
         recycler_recipes.setAdapter(adapter);
-
-
 
     }
 
@@ -255,9 +259,11 @@ public class FavouriteActivity extends AppCompatActivity {
     // Function to retrieve the selected item index from SharedPreferences
     private int getSelectedNavItemIndex(int defaultValue) {
         return sharedPreferences.getInt(PREF_SELECTED_NAV_ITEM_INDEX, defaultValue);
+
     }
     private int getSelectedTopNavItemIndex(int defaultValue) {
         return sharedPreferences2.getInt(PREF_SELECTED_TOP_NAV_ITEM_INDEX, defaultValue);
+
     }
 
 }

@@ -14,7 +14,7 @@
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/layout/activity_splash_screen.xml" value="0.1984375" />
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/layout/details_toolbar.xml" value="0.14375" />
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/layout/home.xml" value="0.21510416666666668" />
-        <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/layout/list_download_recipe.xml" value="0.536" />
+        <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/layout/list_download_recipe.xml" value="0.5197841726618705" />
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/layout/list_recipe.xml" value="0.14375" />
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/layout/list_recipe_ingredients.xml" value="0.14375" />
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/layout/recipe_cardview.xml" value="0.1984375" />
@@ -22,6 +22,7 @@
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/menu/details_top_menu.xml" value="0.20277777777777778" />
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/menu/download_top_menu.xml" value="0.24615384615384617" />
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/menu/nav_bottom_menu.xml" value="0.14375" />
+        <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy - Copy/app/src/main/res/menu/top_fav_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy/app/src/main/res/layout/activity_favourite.xml" value="0.11398176291793313" />
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy/app/src/main/res/layout/activity_main.xml" value="0.12158054711246201" />
         <entry key="..\:/Users/annie/AndroidStudioProjects/RecipeAssignment - Copy/app/src/main/res/layout/activity_recipe_details.xml" value="0.2" />

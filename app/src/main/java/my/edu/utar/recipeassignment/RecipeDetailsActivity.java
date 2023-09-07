@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.squareup.picasso.Picasso;
@@ -268,12 +269,14 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
 
                 addToFavourites(isFavorite, title, imageURL, ingredients, steps, recipeId); //add to sql fav database
+                Toast.makeText(getApplicationContext(), "Added to Fav " , Toast.LENGTH_SHORT).show();
 
                 return true;
 
             case R.id.action_download:
 
                 addToDownloads(title, imageURL, ingredients, steps, recipeId); //add to sql fav database
+                Toast.makeText(getApplicationContext(), "Downloaded " , Toast.LENGTH_SHORT).show();
 
 
             default:
@@ -336,8 +339,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         System.out.println("Entering add to downloads function");
 
          // add recipe to db
-            System.out.println("Adding to favorites and writing to DB");
-            mySQLiteAdapter.insert_recipe( title, imageURL, recipeId, ingredients, steps);
+            System.out.println("Adding to downloads and writing to DB");
+            System.out.println("Adding " + title);
+
+        mySQLiteAdapter.insert_recipe( title, imageURL, recipeId, ingredients, steps);
             //mySQLiteAdapter.insert_fav_recipe_id(recipeId);
             mySQLiteAdapter.close();
 //

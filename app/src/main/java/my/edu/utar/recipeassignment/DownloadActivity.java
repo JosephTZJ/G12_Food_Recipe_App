@@ -102,7 +102,7 @@ public class DownloadActivity extends AppCompatActivity {
         {
             switch(item.getItemId()){
                 case R.id.fav_mn:
-                    //saveSelectedTopNavItemIndex(0);
+                    saveSelectedTopNavItemIndex(0);
                     Intent intent = new Intent(DownloadActivity.this, FavouriteActivity.class);
                     startActivity(intent);
                     return true;
