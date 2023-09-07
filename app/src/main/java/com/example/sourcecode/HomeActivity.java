@@ -13,7 +13,10 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -45,6 +48,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private RecipeAdapter adapter;
     private JSONArray originalJsonArray;
+
+    private Spinner genreSpinner;
+    private ArrayAdapter<String> genreAdapter;
+    private List<String> uniqueGenres = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +111,27 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+        genreSpinner = findViewById(R.id.genre_spinner);
+
+        genreAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, uniqueGenres);
+        genreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genreSpinner.setAdapter(genreAdapter);
+
+        genreSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String selectedGenre = genreAdapter.getItem(position);
+                if (selectedGenre != null && !selectedGenre.isEmpty()) {
+                    filterRecipesByGenre(selectedGenre);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do nothing
+            }
+        });
     }
 
     private void filterRecipes(String query) {
@@ -124,6 +152,49 @@ public class HomeActivity extends AppCompatActivity {
             }
             adapter.updateData(filteredArray);
         }
+    }
+
+    private void filterRecipesByGenre(String selectedGenre) {
+        if (selectedGenre == null || selectedGenre.isEmpty()) {
+            adapter.updateData(originalJsonArray);
+        } else {
+            JSONArray filteredArray = new JSONArray();
+            for (int i = 0; i < originalJsonArray.length(); i++) {
+                try {
+                    JSONObject jsonObject = originalJsonArray.getJSONObject(i);
+                    JSONArray genreArray = jsonObject.getJSONArray("genre");
+                    for (int j = 0; j < genreArray.length(); j++) {
+                        String genre = genreArray.getString(j).toLowerCase();
+                        if (genre.equals(selectedGenre.toLowerCase())) {
+                            filteredArray.put(jsonObject);
+                            break;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            adapter.updateData(filteredArray);
+        }
+    }
+
+    private void updateGenreSpinner(JSONArray jsonArray) {
+        uniqueGenres.clear();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                JSONArray genreArray = jsonObject.getJSONArray("genre");
+                for (int j = 0; j < genreArray.length(); j++) {
+                    String genre = genreArray.getString(j);
+                    if (!uniqueGenres.contains(genre)) {
+                        uniqueGenres.add(genre);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        genreAdapter.notifyDataSetChanged();
     }
 
     private class MyThread extends Thread {
@@ -163,6 +234,8 @@ public class HomeActivity extends AppCompatActivity {
                                 JSONArray jsonArray = new JSONArray(result);
                                 originalJsonArray = jsonArray;
                                 adapter.updateData(jsonArray);
+
+                                updateGenreSpinner(originalJsonArray);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
