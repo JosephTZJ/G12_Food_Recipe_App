@@ -114,6 +114,9 @@ public class HomeActivity extends AppCompatActivity {
 
         genreSpinner = findViewById(R.id.genre_spinner);
 
+        // Add "All Genres" option by default
+        uniqueGenres.add("All Genres");
+
         genreAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, uniqueGenres);
         genreAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         genreSpinner.setAdapter(genreAdapter);
@@ -122,9 +125,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 String selectedGenre = genreAdapter.getItem(position);
-                if (selectedGenre != null && !selectedGenre.isEmpty()) {
-                    filterRecipesByGenre(selectedGenre);
-                }
+                adapter.filterByGenre(selectedGenre);
             }
 
             @Override
@@ -154,32 +155,9 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void filterRecipesByGenre(String selectedGenre) {
-        if (selectedGenre == null || selectedGenre.isEmpty()) {
-            adapter.updateData(originalJsonArray);
-        } else {
-            JSONArray filteredArray = new JSONArray();
-            for (int i = 0; i < originalJsonArray.length(); i++) {
-                try {
-                    JSONObject jsonObject = originalJsonArray.getJSONObject(i);
-                    JSONArray genreArray = jsonObject.getJSONArray("genre");
-                    for (int j = 0; j < genreArray.length(); j++) {
-                        String genre = genreArray.getString(j).toLowerCase();
-                        if (genre.equals(selectedGenre.toLowerCase())) {
-                            filteredArray.put(jsonObject);
-                            break;
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            adapter.updateData(filteredArray);
-        }
-    }
-
     private void updateGenreSpinner(JSONArray jsonArray) {
         uniqueGenres.clear();
+        uniqueGenres.add("All Genres"); // Always add "All Genres" option
         for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -264,14 +242,22 @@ public class HomeActivity extends AppCompatActivity {
 
     private class RecipeAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
         private JSONArray jsonArray;
+        private JSONArray filteredArray;
 
         public RecipeAdapter(JSONArray jsonArray) {
             this.jsonArray = jsonArray;
+            this.filteredArray = jsonArray;
         }
 
         public void updateData(JSONArray jsonArray) {
             this.jsonArray = jsonArray;
+            this.filteredArray = jsonArray;
             notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemCount() {
+            return filteredArray != null ? filteredArray.length() : 0;
         }
 
         @Override
@@ -283,34 +269,56 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(RecipeViewHolder holder, int position) {
             try {
-                JSONObject jsonObject = jsonArray.getJSONObject(position);
-                String recipeName = jsonObject.getString("recipe_name");
-                String recipeId = jsonObject.getString("id");
-                String recipeImageUrl = jsonObject.getString("imageURL");
+                if (filteredArray != null && filteredArray.length() > position) {
+                    JSONObject jsonObject = filteredArray.getJSONObject(position);
+                    String recipeName = jsonObject.getString("recipe_name");
+                    String recipeId = jsonObject.getString("id");
+                    String recipeImageUrl = jsonObject.getString("imageURL");
 
-                holder.title.setText(recipeName);
+                    holder.title.setText(recipeName);
 
-                Picasso.get()
-                        .load(recipeImageUrl)
-                        .into(holder.recipeImage);
+                    Picasso.get()
+                            .load(recipeImageUrl)
+                            .into(holder.recipeImage);
 
-                holder.cardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        intent.putExtra("recipeId", recipeId);
-                        intent.putExtra("response", recipeResponses.get(0));
+                    holder.cardView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            intent.putExtra("recipeId", recipeId);
+                            intent.putExtra("response", recipeResponses.get(0));
 
-                        startActivity(intent);
-                    }
-                });
+                            startActivity(intent);
+                        }
+                    });
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        @Override
-        public int getItemCount() {
-            return jsonArray.length();
+        public void filterByGenre(String selectedGenre) {
+            if (selectedGenre == null || selectedGenre.isEmpty() || selectedGenre.equals("All Genres")) {
+                filteredArray = jsonArray;
+            } else {
+                JSONArray newFilteredArray = new JSONArray();
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    try {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        JSONArray genreArray = jsonObject.getJSONArray("genre");
+                        for (int j = 0; j < genreArray.length(); j++) {
+                            String genre = genreArray.getString(j).toLowerCase();
+                            if (genre.equals(selectedGenre.toLowerCase())) {
+                                newFilteredArray.put(jsonObject);
+                                break;
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                filteredArray = newFilteredArray;
+            }
+            notifyDataSetChanged();
         }
     }
 
