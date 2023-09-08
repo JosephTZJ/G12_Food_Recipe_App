@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SourceCode">
         <activity
+            android:name=".NewRecipeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DayPlannerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PlannerActivity"
+            android:exported="false" />
+        <activity
             android:name=".DownloadedRecipeDetailsActivity"
             android:exported="false" />
         <activity
@@ -28,7 +37,7 @@
             android:exported="false" />
         <activity
             android:name=".SplashScreen"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

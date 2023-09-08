@@ -94,6 +94,8 @@ public class HomeActivity extends AppCompatActivity {
 
                 case R.id.calendar:
                     saveSelectedNavItemIndex(3);
+                    Intent intent3 = new Intent(HomeActivity.this, PlannerActivity.class);
+                    startActivity(intent3);
                     return true;
 
             }
