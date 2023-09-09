@@ -60,6 +60,15 @@ public class DayPlannerActivity extends AppCompatActivity {
             }
         });
 
+        ImageButton backButton = findViewById(R.id.ibt_back);
+        backButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DayPlannerActivity.this, PlannerActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Initialize LinearLayout
         linearview = findViewById(R.id.linearview);
 
