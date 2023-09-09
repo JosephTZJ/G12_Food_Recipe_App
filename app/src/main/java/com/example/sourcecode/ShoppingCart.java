@@ -60,6 +60,9 @@ public class ShoppingCart extends AppCompatActivity {
                     return true;
 
                 case R.id.calendar:
+                    saveSelectedNavItemIndex(3);
+                    Intent intent_planner = new Intent(ShoppingCart.this, PlannerActivity.class);
+                    startActivity(intent_planner);
                     return true;
 
             }

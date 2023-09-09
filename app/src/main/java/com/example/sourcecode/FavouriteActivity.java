@@ -88,7 +88,7 @@ public class FavouriteActivity extends AppCompatActivity {
                     return true;
 
                 case R.id.calendar:
-                    saveSelectedNavItemIndex(2);
+                    saveSelectedNavItemIndex(3);
                     Intent intent3 = new Intent(FavouriteActivity.this, PlannerActivity.class);
                     startActivity(intent3);
                     return true;
